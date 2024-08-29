@@ -2,7 +2,6 @@
 // TODO: Improve skeleton UI to match design
 // TODO: Improve no results message and UI
 // TODO: Add "distance away" label and value to each property card
-// TODO: Add limit to number of properties shown
 
 function createSkeletonCard() {
     return `
@@ -37,7 +36,7 @@ async function fetchProperties() {
     showSkeletonLoading();
     try {
         const coordinates = getCoordinates();
-        const apiUrl = `https://hosthhi-get-nearby-properties.ocean-blvd.workers.dev/?lat=${coordinates.latitude}&lon=${coordinates.longitude}&maxDistance=5`;
+        const apiUrl = `https://hosthhi-get-nearby-properties.ocean-blvd.workers.dev/?lat=${coordinates.latitude}&lon=${coordinates.longitude}&limit=9&randomize=true`;
 
         // Add a 2-second delay to test skeleton
         //await new Promise(resolve => setTimeout(resolve, 2000));
