@@ -30,8 +30,8 @@ async function fetchProperties() {
     );
     showSkeletonLoading();
     try {
-        const apiUrl =
-            "https://hosthhi-get-nearby-properties.ocean-blvd.workers.dev/?lat={{wf {&quot;path&quot;:&quot;latitude&quot;,&quot;type&quot;:&quot;Number&quot;} }}&lon={{wf {&quot;path&quot;:&quot;longitude&quot;,&quot;type&quot;:&quot;Number&quot;} }}&maxDistance=1";
+        const coordinates = getCoordinates();
+        const apiUrl = `https://hosthhi-get-nearby-properties.ocean-blvd.workers.dev/?lat=${coordinates.latitude}&lon=${coordinates.longitude}&maxDistance=1`;
 
         // Add a 2-second delay to test skeleton
         //await new Promise(resolve => setTimeout(resolve, 2000));
@@ -47,6 +47,27 @@ async function fetchProperties() {
         getContainer().innerHTML =
             "<p>Sorry, we could not find any nearby vacation rentals.</p>";
     }
+}
+
+function getCoordinates() {
+    const jsonLdScript = document.querySelector(
+        'script[type="application/ld+json"]'
+    );
+    if (jsonLdScript) {
+        const jsonLdData = JSON.parse(jsonLdScript.textContent);
+        if (
+            jsonLdData.geo &&
+            jsonLdData.geo.latitude &&
+            jsonLdData.geo.longitude
+        ) {
+            return {
+                latitude: jsonLdData.geo.latitude,
+                longitude: jsonLdData.geo.longitude,
+            };
+        }
+    }
+    console.error("Coordinates not found in JSON-LD script");
+    return { latitude: "", longitude: "" };
 }
 
 function displayProperties(properties) {
